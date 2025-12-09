@@ -1,0 +1,47 @@
+[
+    {
+        "id": "pixel-9-pro",
+        "name": "Google Pixel 9 Pro",
+        "brand": "Google",
+        "price": "$999",
+        "image": "/images/pixel-9-pro.png",
+        "specs": {
+            "screen": "6.7 inch Super Actua Display",
+            "processor": "Google Tensor G4",
+            "battery": "5060 mAh",
+            "camera": "50MP Main, 48MP Ultrawide, 48MP Telephoto",
+            "storage": "128GB / 256GB / 512GB / 1TB",
+            "ram": "16GB"
+        }
+    },
+    {
+        "id": "iphone-16-pro",
+        "name": "iPhone 16 Pro",
+        "brand": "Apple",
+        "price": "$999",
+        "image": "/images/iphone-16-pro.png",
+        "specs": {
+            "screen": "6.3 inch Super Retina XDR",
+            "processor": "A18 Pro",
+            "battery": "3274 mAh",
+            "camera": "48MP Fusion, 48MP Ultrawide, 12MP Telephoto",
+            "storage": "128GB / 256GB / 512GB / 1TB",
+            "ram": "8GB"
+        }
+    },
+    {
+        "id": "s24-ultra",
+        "name": "Samsung Galaxy S24 Ultra",
+        "brand": "Samsung",
+        "price": "$1299",
+        "image": "/images/s24-ultra.png",
+        "specs": {
+            "screen": "6.8 inch Dynamic AMOLED 2X",
+            "processor": "Snapdragon 8 Gen 3 for Galaxy",
+            "battery": "5000 mAh",
+            "camera": "200MP Main, 50MP Periscope, 12MP Ultrawide",
+            "storage": "256GB / 512GB / 1TB",
+            "ram": "12GB"
+        }
+    }
+]
