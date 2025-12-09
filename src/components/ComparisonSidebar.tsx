@@ -15,7 +15,7 @@ export function ComparisonSidebar() {
     if (selectedPhones.length === 0) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 top-[180px] w-[360px] bg-black/40 border-r border-gray-800 p-4 flex flex-col z-40 animate-slide-in">
+        <div className="fixed bottom-0 left-0 top-[220px] w-[360px] bg-black/40 border-r border-gray-800 p-4 flex flex-col z-40 animate-slide-in">
             <div className="flex-1 overflow-y-auto space-y-4">
                 {selectedPhones.map(phone => (
                     <div key={phone.id} className="flex gap-4 bg-white p-3 rounded-xl relative group shadow-sm">

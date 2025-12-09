@@ -4,48 +4,49 @@ import searchIcon from '@/assets/search-icon.svg';
 
 export function Header() {
     return (
-        <header className="pt-6 pb-2 px-8 max-w-[1400px] mx-auto">
+        <header className="pt-8 pb-4 px-8 max-w-[1400px] mx-auto">
             <div className="flex items-center justify-between gap-8 mb-4">
                 {/* Logo */}
-                <Link href="/" className="flex flex-col">
-                    <h1 className="text-3xl font-extrabold tracking-tight text-white leading-none">
+                <Link href="/" className="flex flex-col group">
+                    <h1 className="text-4xl font-black tracking-tight text-white leading-none group-hover:text-gray-200 transition-colors">
                         PhoneStadium
                     </h1>
-                    <span className="text-xs text-white font-medium tracking-widest pl-0.5">
+                    <span className="text-sm text-white font-medium tracking-[0.2em] pl-0.5 group-hover:text-gray-300 transition-colors">
                         Phone  search  made  easy
                     </span>
                 </Link>
 
-                {/* Search Bar */}
-                <div className="flex-1 max-w-xl relative">
-                    <div className="relative">
+                {/* Centered Search and Nav */}
+                <div className="flex-1 flex flex-col items-center gap-6">
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-4 w-full max-w-xl">
                         <input
                             type="text"
                             placeholder="Search here"
-                            className="w-full bg-white text-gray-900 rounded-full py-3 px-6 pr-12 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full bg-white text-gray-900 rounded-full py-3 px-6 text-lg placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-white/20 transition-all font-medium"
                         />
-                        <button className="absolute right-4 top-1/2 -translate-y-1/2">
-                            <Image src={searchIcon} alt="Search" width={24} height={24} />
+                        <button className="flex-shrink-0 p-2 hover:bg-white/10 rounded-full transition-colors">
+                            <Image src={searchIcon} alt="Search" width={32} height={32} />
                         </button>
                     </div>
+
+                    {/* Navigation Links */}
+                    <nav className="flex items-center justify-center gap-16 text-gray-200">
+                        {['Phones', 'Reviews', 'Benchmarks', 'Discussions'].map((item) => (
+                            <Link key={item} href="#" className="hover:text-white font-bold text-base transition-colors tracking-wide">
+                                {item}
+                            </Link>
+                        ))}
+                    </nav>
                 </div>
 
                 {/* Auth */}
-                <div className="text-white font-medium">
-                    <span className="cursor-pointer hover:text-gray-300">Sign Up</span>
-                    <span className="mx-1 text-gray-400">or</span>
-                    <span className="cursor-pointer hover:text-gray-300 font-bold">Login</span>
+                <div className="text-white font-medium text-lg min-w-[140px] text-right">
+                    <span className="cursor-pointer hover:text-gray-300 transition-colors">Sign Up</span>
+                    <span className="mx-2 text-gray-400">or</span>
+                    <span className="cursor-pointer hover:text-gray-300 font-bold transition-colors">Login</span>
                 </div>
             </div>
-
-            {/* Navigation Links */}
-            <nav className="flex items-center justify-center gap-12 text-gray-200 mt-2">
-                {['Phones', 'Reviews', 'Benchmarks', 'Discussions'].map((item) => (
-                    <Link key={item} href="#" className="hover:text-white font-medium text-sm transition-colors">
-                        {item}
-                    </Link>
-                ))}
-            </nav>
         </header>
     );
 }
