@@ -1,62 +1,102 @@
 import { getAllPhones } from '@/lib/data';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone } from '@/types/phone';
+import { Header } from '@/components/Header';
+import addIcon from '@/assets/add-icon.svg';
 
-export default async function ComparePage({ searchParams }: { searchParams: Promise<{ p1?: string; p2?: string }> }) {
-    const { p1, p2 } = await searchParams;
+export default async function ComparePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+    const params = await searchParams;
     const allPhones = getAllPhones();
 
-    // Simple logic to find selected phones
-    const phone1 = allPhones.find(p => p.id === p1);
-    const phone2 = allPhones.find(p => p.id === p2);
+    // Extract all 'p' params
+    const pParam = params['p'];
+    const ids: string[] = [];
 
-    const comparisonList = [phone1, phone2].filter(Boolean) as Phone[];
+    if (Array.isArray(pParam)) {
+        ids.push(...pParam);
+    } else if (typeof pParam === 'string') {
+        ids.push(pParam);
+    }
+
+    const comparisonList = ids.map(id => allPhones.find(p => p.id === id)).filter(Boolean) as Phone[];
 
     return (
-        <div className="min-h-screen p-8 max-w-7xl mx-auto">
-            <Link href="/" className="text-gray-500 hover:text-gray-900 mb-8 inline-block">&larr; Back to Home</Link>
-            <h1 className="text-3xl font-bold mb-8">Compare Phones</h1>
+        <main className="min-h-screen bg-transparent pb-12">
+            <Header />
 
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr>
-                            <th className="p-4 border-b-2 bg-gray-50 min-w-[200px]">Feature</th>
-                            {comparisonList.length > 0 ? comparisonList.map(phone => (
-                                <th key={phone.id} className="p-4 border-b-2 min-w-[300px]">
-                                    <div className="test-center">
-                                        <div className="h-24 bg-gray-100 rounded mb-2 flex items-center justify-center text-2xl">📱</div>
-                                        {phone.name}
-                                        <div className="text-sm font-normal text-gray-500">{phone.price}</div>
-                                    </div>
-                                </th>
-                            )) : (
-                                <th className="p-4 border-b-2 text-gray-400 font-normal">Select phones to compare</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {['screen', 'processor', 'battery', 'camera', 'storage', 'ram'].map((spec) => (
-                            <tr key={spec} className="border-b hover:bg-gray-50">
-                                <td className="p-4 font-semibold text-gray-700 capitalize">{spec}</td>
-                                {comparisonList.map((phone) => (
-                                    <td key={phone.id} className="p-4 text-gray-900">
-                                        {/* @ts-expect-error key access */}
-                                        {phone.specs[spec]}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="px-8 mt-4 mb-8">
+                <div className="bg-gray-100 rounded-lg inline-block px-4 py-1">
+                    <span className="text-gray-900 font-semibold text-sm">Filter Specifications</span>
+                </div>
             </div>
 
-            {comparisonList.length === 0 && (
-                <div className="text-center py-12 bg-gray-50 rounded-lg mt-4">
-                    <p className="text-gray-500 mb-4">No phones selected for comparison.</p>
-                    <Link href="/" className="text-blue-600 font-semibold hover:underline">Select phones from Home</Link>
+            <div className="px-8 max-w-[1400px] mx-auto overflow-x-auto pb-8">
+                <div className="flex gap-4">
+                    {/* Phone Columns */}
+                    {comparisonList.map((phone) => (
+                        <div key={phone.id} className="min-w-[320px] w-[320px] bg-white rounded-xl shadow-lg overflow-hidden flex flex-col animate-fade-in">
+                            <div className="h-64 bg-gradient-to-b from-gray-50 to-gray-200 relative p-6 flex items-center justify-center">
+                                <img src={phone.image} alt={phone.name} className="max-w-full max-h-full object-contain drop-shadow-lg" />
+                            </div>
+
+                            <div className="p-6 flex-1 flex flex-col">
+                                <div className="mb-6">
+                                    <p className="text-gray-500 font-semibold mb-1">{phone.brand}</p>
+                                    <h2 className="text-2xl font-bold text-gray-900 leading-tight mb-4">{phone.name}</h2>
+
+                                    <div className="space-y-3 text-sm">
+                                        <div>
+                                            <span className="font-semibold text-gray-900">Storage: </span>
+                                            <span className="text-gray-600">{phone.storage_options?.join(', ')}</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900">Dimensions: </span>
+                                            <span className="text-gray-600">{phone.specs.dimensions}</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900">Weight: </span>
+                                            <span className="text-gray-600">{phone.specs.weight}</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900">Display: </span>
+                                            <span className="text-gray-600">{phone.specs.screen}</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900">Processor: </span>
+                                            <span className="text-gray-600">{phone.specs.processor}</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900">Camera: </span>
+                                            <span className="text-gray-600 block mt-1 leading-relaxed">{phone.specs.camera}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-auto pt-6 border-t border-gray-100">
+                                    <div className="flex justify-end items-center mb-4">
+                                        <span className="text-xs font-bold text-blue-600 uppercase mr-2">Starts At</span>
+                                        <span className="text-xl font-bold text-blue-600">{phone.price}</span>
+                                    </div>
+
+                                    <Link href={`/compare?${ids.filter(id => id !== phone.id).map(id => `p=${id}`).join('&')}`} className="block">
+                                        <button className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-lg transition-colors">
+                                            Remove
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Add Button */}
+                    <div className="min-w-[100px] flex items-center justify-center">
+                        <Link href="/" className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors shadow-lg">
+                            <Image src={addIcon} alt="Add phone" width={32} height={32} />
+                        </Link>
+                    </div>
                 </div>
-            )}
-        </div>
+            </div>
+        </main>
     );
 }
