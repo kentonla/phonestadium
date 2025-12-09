@@ -25,11 +25,19 @@ export function ComparisonSidebar() {
                         <div className="flex-1 pr-6">
                             <p className="text-sm text-gray-500 font-semibold mb-0.5">{phone.brand}</p>
                             <p className="text-base font-bold text-gray-900 leading-tight">{phone.name}</p>
+                            <div className="mt-1 space-y-0.5">
+                                <p className="text-xs text-gray-500 font-medium">
+                                    {phone.storage_options?.join('/')}
+                                </p>
+                                <p className="text-xs text-blue-600 font-bold">
+                                    Starts at {phone.price}
+                                </p>
+                            </div>
                             <button
                                 onClick={() => removePhone(phone.id)}
                                 className="absolute bottom-2 right-2 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                             >
-                                <Image src={removeIcon} alt="Remove" width={20} height={20} />
+                                <Image src={removeIcon} alt="Remove" width={24} height={24} />
                             </button>
                         </div>
                     </div>
