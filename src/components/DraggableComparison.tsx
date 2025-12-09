@@ -3,12 +3,80 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Reorder } from 'framer-motion';
+import { Reorder, useDragControls } from 'framer-motion';
 import { Phone } from '@/types/phone';
 import addIcon from '@/assets/add-icon.svg';
 
 interface DraggableComparisonProps {
     initialPhones: Phone[];
+}
+
+// Subcomponent for individual items to support useDragControls per item
+function DraggableItem({ phone, items, getRemoveUrl }: { phone: Phone, items: Phone[], getRemoveUrl: (id: string) => string }) {
+    const controls = useDragControls();
+
+    return (
+        <Reorder.Item
+            value={phone}
+            dragListener={false}
+            dragControls={controls}
+            className="min-w-[320px] w-[320px] bg-white rounded-xl shadow-lg overflow-hidden flex flex-col group"
+        >
+            <div
+                className="h-64 bg-gradient-to-b from-gray-50 to-gray-200 relative p-6 flex items-center justify-center cursor-grab active:cursor-grabbing hover:bg-gray-100 transition-colors select-none"
+                onPointerDown={(e) => controls.start(e)}
+            >
+                <img src={phone.image} alt={phone.name} className="max-w-full max-h-full object-contain drop-shadow-lg pointer-events-none" />
+            </div>
+
+            <div className="p-6 flex-1 flex flex-col cursor-text select-text">
+                <div className="mb-6">
+                    <p className="text-gray-500 font-semibold mb-1">{phone.brand}</p>
+                    <h2 className="text-2xl font-bold text-gray-900 leading-tight mb-4">{phone.name}</h2>
+
+                    <div className="space-y-3 text-sm">
+                        <div>
+                            <span className="font-semibold text-gray-900">Storage: </span>
+                            <span className="text-gray-600">{phone.storage_options?.join(', ')}</span>
+                        </div>
+                        <div>
+                            <span className="font-semibold text-gray-900">Dimensions: </span>
+                            <span className="text-gray-600">{phone.specs.dimensions}</span>
+                        </div>
+                        <div>
+                            <span className="font-semibold text-gray-900">Weight: </span>
+                            <span className="text-gray-600">{phone.specs.weight}</span>
+                        </div>
+                        <div>
+                            <span className="font-semibold text-gray-900">Display: </span>
+                            <span className="text-gray-600">{phone.specs.screen}</span>
+                        </div>
+                        <div>
+                            <span className="font-semibold text-gray-900">Processor: </span>
+                            <span className="text-gray-600">{phone.specs.processor}</span>
+                        </div>
+                        <div>
+                            <span className="font-semibold text-gray-900">Camera: </span>
+                            <span className="text-gray-600 block mt-1 leading-relaxed">{phone.specs.camera}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-auto pt-6 border-t border-gray-100">
+                    <div className="flex justify-end items-center mb-4">
+                        <span className="text-xs font-bold text-blue-600 uppercase mr-2">Starts At</span>
+                        <span className="text-xl font-bold text-blue-600">{phone.price}</span>
+                    </div>
+
+                    <Link href={getRemoveUrl(phone.id)} className="block" prefetch={false}>
+                        <button className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-lg transition-colors cursor-pointer">
+                            Remove
+                        </button>
+                    </Link>
+                </div>
+            </div>
+        </Reorder.Item>
+    );
 }
 
 export function DraggableComparison({ initialPhones }: DraggableComparisonProps) {
@@ -37,62 +105,7 @@ export function DraggableComparison({ initialPhones }: DraggableComparisonProps)
                 className="flex gap-4 min-w-max"
             >
                 {items.map((phone) => (
-                    <Reorder.Item
-                        key={phone.id}
-                        value={phone}
-                        className="min-w-[320px] w-[320px] bg-white rounded-xl shadow-lg overflow-hidden flex flex-col cursor-grab active:cursor-grabbing"
-                    >
-                        <div className="h-64 bg-gradient-to-b from-gray-50 to-gray-200 relative p-6 flex items-center justify-center">
-                            <img src={phone.image} alt={phone.name} className="max-w-full max-h-full object-contain drop-shadow-lg pointer-events-none" />
-                        </div>
-
-                        <div className="p-6 flex-1 flex flex-col">
-                            <div className="mb-6">
-                                <p className="text-gray-500 font-semibold mb-1">{phone.brand}</p>
-                                <h2 className="text-2xl font-bold text-gray-900 leading-tight mb-4">{phone.name}</h2>
-
-                                <div className="space-y-3 text-sm">
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Storage: </span>
-                                        <span className="text-gray-600">{phone.storage_options?.join(', ')}</span>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Dimensions: </span>
-                                        <span className="text-gray-600">{phone.specs.dimensions}</span>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Weight: </span>
-                                        <span className="text-gray-600">{phone.specs.weight}</span>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Display: </span>
-                                        <span className="text-gray-600">{phone.specs.screen}</span>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Processor: </span>
-                                        <span className="text-gray-600">{phone.specs.processor}</span>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-900">Camera: </span>
-                                        <span className="text-gray-600 block mt-1 leading-relaxed">{phone.specs.camera}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-auto pt-6 border-t border-gray-100">
-                                <div className="flex justify-end items-center mb-4">
-                                    <span className="text-xs font-bold text-blue-600 uppercase mr-2">Starts At</span>
-                                    <span className="text-xl font-bold text-blue-600">{phone.price}</span>
-                                </div>
-
-                                <Link href={getRemoveUrl(phone.id)} className="block" prefetch={false}>
-                                    <button className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-lg transition-colors cursor-pointer">
-                                        Remove
-                                    </button>
-                                </Link>
-                            </div>
-                        </div>
-                    </Reorder.Item>
+                    <DraggableItem key={phone.id} phone={phone} items={items} getRemoveUrl={getRemoveUrl} />
                 ))}
 
                 {/* Add Button */}
