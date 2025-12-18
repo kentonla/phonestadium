@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Reorder, useDragControls } from 'framer-motion';
 import { Phone } from '@/types/phone';
 import addIcon from '@/assets/add-icon.svg';
+import { SearchAddModal } from './SearchAddModal';
 
 interface DraggableComparisonProps {
     initialPhones: Phone[];
@@ -76,6 +77,7 @@ function DraggableItem({ phone, items, getRemoveUrl, visibleSpecs }: { phone: Ph
 
 export function DraggableComparison({ initialPhones, visibleSpecs }: DraggableComparisonProps) {
     const [items, setItems] = useState(initialPhones);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
         setItems(initialPhones);
@@ -105,11 +107,20 @@ export function DraggableComparison({ initialPhones, visibleSpecs }: DraggableCo
 
                 {/* Add Button */}
                 <div className="min-w-[100px] flex items-center justify-center">
-                    <Link href="/" className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors shadow-lg">
+                    <button
+                        onClick={() => setIsSearchOpen(true)}
+                        className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors shadow-lg cursor-pointer"
+                    >
                         <Image src={addIcon} alt="Add phone" width={32} height={32} />
-                    </Link>
+                    </button>
                 </div>
             </Reorder.Group>
+
+            <SearchAddModal
+                isOpen={isSearchOpen}
+                onClose={() => setIsSearchOpen(false)}
+                currentPhoneIds={items.map(p => p.id)}
+            />
         </div>
     );
 }

@@ -1,3 +1,4 @@
+import { HeaderSearch } from '@/components/HeaderSearch';
 import Image from 'next/image';
 import Link from 'next/link';
 import searchIcon from '@/assets/search-icon.svg';
@@ -19,16 +20,7 @@ export function Header() {
                 {/* Centered Search and Nav */}
                 <div className="flex-1 flex flex-col items-center gap-6">
                     {/* Search Bar */}
-                    <div className="flex items-center gap-4 w-full max-w-xl">
-                        <input
-                            type="text"
-                            placeholder="Search here"
-                            className="w-full bg-white text-gray-900 rounded-full py-3 px-6 text-lg placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-white/20 transition-all font-medium"
-                        />
-                        <button className="flex-shrink-0 p-2 hover:bg-white/10 rounded-full transition-colors">
-                            <Image src={searchIcon} alt="Search" width={32} height={32} />
-                        </button>
-                    </div>
+                    <HeaderSearch />
 
                     {/* Navigation Links */}
                     <nav className="flex items-center justify-center gap-16 text-gray-200">
