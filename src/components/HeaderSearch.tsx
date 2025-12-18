@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import searchIcon from '@/assets/search-icon.svg';
 import { Phone } from '@/types/phone';
@@ -12,6 +12,8 @@ export function HeaderSearch() {
     const [results, setResults] = useState<Phone[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Handle search changes
@@ -39,6 +41,24 @@ export function HeaderSearch() {
 
     const handleSelect = (phoneId: string) => {
         router.push(`/phones/${phoneId}`);
+        setIsOpen(false);
+        setQuery('');
+    };
+
+    const handleAdd = (e: React.MouseEvent, phoneId: string) => {
+        e.stopPropagation(); // Prevent navigation to detail page
+
+        const currentParams = new URLSearchParams(searchParams.toString());
+        currentParams.append('p', phoneId);
+
+        // If we are already on the compare page, replace URL to update state
+        // If not, push to compare page
+        if (pathname === '/compare') {
+            router.replace(`/compare?${currentParams.toString()}`);
+        } else {
+            router.push(`/compare?${currentParams.toString()}`);
+        }
+
         setIsOpen(false);
         setQuery('');
     };
@@ -79,11 +99,13 @@ export function HeaderSearch() {
                                 <h3 className="font-bold text-gray-900 text-sm truncate group-hover:text-blue-600 transition-colors">{phone.name}</h3>
                                 <p className="text-xs text-gray-500 truncate">{phone.brand}</p>
                             </div>
-                            <div className="text-gray-400">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </div>
+
+                            <button
+                                onClick={(e) => handleAdd(e, phone.id)}
+                                className="ml-2 px-3 py-1.5 bg-gray-700 text-white text-xs font-bold rounded-lg hover:bg-blue-600 hover:text-white transition-colors"
+                            >
+                                Add +
+                            </button>
                         </div>
                     ))}
                 </div>
