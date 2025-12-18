@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 interface SpecificationFilterModalProps {
     isOpen: boolean;
     onClose: () => void;
     onApply: (selected: string[]) => void;
+    initialSelected: string[];
 }
 
 const FILTER_OPTIONS = [
@@ -15,8 +16,15 @@ const FILTER_OPTIONS = [
     'Brightness', 'GPU', 'Battery power', 'Audio', 'Connectivity and features'
 ];
 
-export function SpecificationFilterModal({ isOpen, onClose, onApply }: SpecificationFilterModalProps) {
-    const [selected, setSelected] = useState<string[]>([]);
+export function SpecificationFilterModal({ isOpen, onClose, onApply, initialSelected }: SpecificationFilterModalProps) {
+    const [selected, setSelected] = useState<string[]>(initialSelected);
+
+    // Sync state when modal opens or initialSelected changes
+    useEffect(() => {
+        if (isOpen) {
+            setSelected(initialSelected);
+        }
+    }, [isOpen, initialSelected]);
 
     if (!isOpen) return null;
 

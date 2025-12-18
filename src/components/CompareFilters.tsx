@@ -3,12 +3,16 @@
 import { useState } from 'react';
 import { SpecificationFilterModal } from './SpecificationFilterModal';
 
-export function CompareFilters() {
+interface CompareFiltersProps {
+    selectedFilters: string[];
+    onFiltersChange: (filters: string[]) => void;
+}
+
+export function CompareFilters({ selectedFilters, onFiltersChange }: CompareFiltersProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleApply = (selected: string[]) => {
-        // In a real app, this would update URL params or global state
-        console.log('Filters applied:', selected);
+        onFiltersChange(selected);
         setIsModalOpen(false);
     };
 
@@ -30,6 +34,7 @@ export function CompareFilters() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onApply={handleApply}
+                initialSelected={selectedFilters}
             />
         </>
     );

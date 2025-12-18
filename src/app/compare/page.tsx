@@ -1,8 +1,7 @@
 import { getAllPhones } from '@/lib/data';
 import { Phone } from '@/types/phone';
 import { Header } from '@/components/Header';
-import { DraggableComparison } from '@/components/DraggableComparison';
-import { CompareFilters } from '@/components/CompareFilters';
+import { CompareContent } from '@/components/CompareContent';
 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
     const params = await searchParams;
@@ -25,13 +24,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
             <Header />
 
             <div className="px-8 max-w-[1400px] mx-auto">
-                <div className="mt-4 mb-8">
-                    <CompareFilters />
-                </div>
-
-                <DraggableComparison
-                    initialPhones={comparisonList}
-                />
+                <CompareContent initialPhones={comparisonList} />
             </div>
         </main>
     );

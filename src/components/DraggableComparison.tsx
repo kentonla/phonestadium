@@ -9,11 +9,22 @@ import addIcon from '@/assets/add-icon.svg';
 
 interface DraggableComparisonProps {
     initialPhones: Phone[];
+    visibleSpecs: string[];
 }
 
 // Subcomponent for individual items to support useDragControls per item
-function DraggableItem({ phone, items, getRemoveUrl }: { phone: Phone, items: Phone[], getRemoveUrl: (id: string) => string }) {
+function DraggableItem({ phone, items, getRemoveUrl, visibleSpecs }: { phone: Phone, items: Phone[], getRemoveUrl: (id: string) => string, visibleSpecs: string[] }) {
     const controls = useDragControls();
+
+    const renderSpec = (label: string, value: string | undefined | null) => {
+        if (!visibleSpecs.includes(label)) return null;
+        return (
+            <div>
+                <span className="font-semibold text-gray-900">{label}: </span>
+                <span className="text-gray-600">{value || '-'}</span>
+            </div>
+        );
+    };
 
     return (
         <Reorder.Item
@@ -35,30 +46,14 @@ function DraggableItem({ phone, items, getRemoveUrl }: { phone: Phone, items: Ph
                     <h2 className="text-2xl font-bold text-gray-900 leading-tight mb-4">{phone.name}</h2>
 
                     <div className="space-y-3 text-sm">
-                        <div>
-                            <span className="font-semibold text-gray-900">Storage: </span>
-                            <span className="text-gray-600">{phone.storage_options?.join(', ')}</span>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-900">Dimensions: </span>
-                            <span className="text-gray-600">{phone.specs.dimensions}</span>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-900">Weight: </span>
-                            <span className="text-gray-600">{phone.specs.weight}</span>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-900">Display: </span>
-                            <span className="text-gray-600">{phone.specs.screen}</span>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-900">Processor: </span>
-                            <span className="text-gray-600">{phone.specs.processor}</span>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-gray-900">Camera: </span>
-                            <span className="text-gray-600 block mt-1 leading-relaxed">{phone.specs.camera}</span>
-                        </div>
+                        {renderSpec('Storage', phone.storage_options?.join(', '))}
+                        {renderSpec('Dimensions', phone.specs.dimensions)}
+                        {renderSpec('Weight', phone.specs.weight)}
+                        {renderSpec('Display', phone.specs.screen)}
+                        {renderSpec('Processor', phone.specs.processor)}
+                        {renderSpec('Camera', phone.specs.camera)}
+                        {renderSpec('RAM', phone.specs.ram)}
+                        {renderSpec('Battery power', phone.specs.battery)}
                     </div>
                 </div>
 
@@ -79,7 +74,7 @@ function DraggableItem({ phone, items, getRemoveUrl }: { phone: Phone, items: Ph
     );
 }
 
-export function DraggableComparison({ initialPhones }: DraggableComparisonProps) {
+export function DraggableComparison({ initialPhones, visibleSpecs }: DraggableComparisonProps) {
     const [items, setItems] = useState(initialPhones);
 
     useEffect(() => {
@@ -105,7 +100,7 @@ export function DraggableComparison({ initialPhones }: DraggableComparisonProps)
                 className="flex gap-4 min-w-max"
             >
                 {items.map((phone) => (
-                    <DraggableItem key={phone.id} phone={phone} items={items} getRemoveUrl={getRemoveUrl} />
+                    <DraggableItem key={phone.id} phone={phone} items={items} getRemoveUrl={getRemoveUrl} visibleSpecs={visibleSpecs} />
                 ))}
 
                 {/* Add Button */}
