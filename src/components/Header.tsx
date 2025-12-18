@@ -24,9 +24,14 @@ export function Header() {
 
                     {/* Navigation Links */}
                     <nav className="flex items-center justify-center gap-16 text-gray-200">
-                        {['Phones', 'Reviews', 'Benchmarks', 'Discussions'].map((item) => (
-                            <Link key={item} href="#" className="hover:text-white font-bold text-base transition-colors tracking-wide">
-                                {item}
+                        {[
+                            { label: 'Phones', href: '/' },
+                            { label: 'Reviews', href: '#' },
+                            { label: 'Benchmarks', href: '#' },
+                            { label: 'Discussions', href: '#' }
+                        ].map((item) => (
+                            <Link key={item.label} href={item.href} className="hover:text-white font-bold text-base transition-colors tracking-wide">
+                                {item.label}
                             </Link>
                         ))}
                     </nav>
