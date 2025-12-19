@@ -6,8 +6,38 @@ import { ComparisonSidebar } from '@/components/ComparisonSidebar'
 import { ComparisonProvider } from '@/context/ComparisonContext'
 import { Suspense } from 'react'
 
-export default function Home() {
-  const phones = getAllPhones()
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const params = await searchParams
+  const sort = typeof params.sort === 'string' ? params.sort : 'relevance'
+
+  const allPhones = getAllPhones()
+  let phones = [...allPhones]
+
+  // Sorting Logic
+  switch (sort) {
+    case 'name':
+      phones.sort((a, b) => a.name.localeCompare(b.name))
+      break
+    case 'price':
+      // Low to High
+      phones.sort((a, b) => (a.priceValue || 0) - (b.priceValue || 0))
+      break
+    case 'year':
+      // Newest First
+      phones.sort((a, b) => {
+        const dateA = new Date(a.releaseDate || '2000-01-01').getTime()
+        const dateB = new Date(b.releaseDate || '2000-01-01').getTime()
+        return dateB - dateA
+      })
+      break
+    default:
+      // Relevance / Default order
+      break
+  }
 
   return (
     <Suspense fallback={null}>

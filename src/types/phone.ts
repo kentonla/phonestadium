@@ -16,6 +16,7 @@ export interface Phone {
     brand: string;
     price: string; // Display price e.g. "$999"
     priceValue?: number; // For sorting
+    releaseDate?: string; // YYYY-MM-DD for sorting
     image: string;
     storage_options?: string[];
     specs: PhoneSpecs;

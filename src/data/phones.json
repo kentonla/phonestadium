@@ -5,6 +5,7 @@
         "brand": "Google",
         "price": "$1,099",
         "priceValue": 1099,
+        "releaseDate": "2024-08-22",
         "image": "/images/pixel9proxl.png",
         "storage_options": [
             "128",
@@ -29,6 +30,7 @@
         "brand": "Apple",
         "price": "$999",
         "priceValue": 999,
+        "releaseDate": "2024-09-20",
         "image": "/images/iphone16pro.png",
         "storage_options": [
             "128",
@@ -53,6 +55,7 @@
         "brand": "Samsung",
         "price": "$949",
         "priceValue": 949,
+        "releaseDate": "2025-02-17",
         "image": "/images/galaxys25ultra.png",
         "storage_options": [
             "256",
