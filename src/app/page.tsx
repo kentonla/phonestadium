@@ -14,8 +14,29 @@ export default async function Home({
   const params = await searchParams
   const sort = typeof params.sort === 'string' ? params.sort : 'relevance'
 
+  // Advanced Filter Params
+  const brands = typeof params.brands === 'string' ? params.brands.split(',') : []
+  const minPrice = typeof params.minPrice === 'string' ? parseFloat(params.minPrice) : 0
+  const maxPrice = typeof params.maxPrice === 'string' ? parseFloat(params.maxPrice) : Infinity
+  const minYear = typeof params.minYear === 'string' ? parseInt(params.minYear, 10) : 0
+
   const allPhones = getAllPhones()
-  let phones = [...allPhones]
+  let phones = allPhones.filter(phone => {
+    // Brand Filter
+    if (brands.length > 0 && !brands.includes(phone.brand)) return false;
+
+    // Price Filter
+    const price = phone.priceValue || 0;
+    if (price < minPrice || price > maxPrice) return false;
+
+    // Year Filter
+    if (minYear > 0) {
+      const year = new Date(phone.releaseDate || '2000-01-01').getFullYear();
+      if (year < minYear) return false;
+    }
+
+    return true;
+  });
 
   // Sorting Logic
   switch (sort) {
